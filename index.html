@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Freehand Drawing Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href='./assets/css/all.min.css'/>
+  <link rel="stylesheet" href="./assets/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="./assets/css/style.css"/>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col-md-12 border-bottom">
+        <h3 class="text-center">Freehand Drawing Tool</h3>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-md-8 pt-2 px-0">
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_pencil" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Pencil"><i class="fa-solid fa-pencil"></i></button>
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_select" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Select Object"><i class="fa-solid fa-arrow-pointer"></i></button>
+
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_eraser" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Erase"><i class="fa-solid fa-eraser"></i></button>
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_undo_eraser" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Undo Eraser">Undo <i class="fa-solid fa-eraser"></i></button>
+        
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_upload_image" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Upload an Image"><i class="fa-solid fa-upload"></i></button>
+        <input type="file" class="d-none btn btn-sm btn-outline-dark mt-2 drawing_upload_image_field" data-bs-toggle="tooltip" data-bs-placement="top" title="Upload an Image">
+
+        &emsp;
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_square" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Square"><i class="fa-regular fa-square"></i></button>
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_rectangle" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Rectangle"><i class="fa-regular fa-square-full"></i></button>
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_circle" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Circle"><i class="fa-regular fa-circle"></i></button>
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_triangle" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Triangle"><i class="fa-solid fa-triangle-exclamation"></i></button>
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_line" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Line"><i class="fa-solid fa-lines-leaning"></i></button>
+        &emsp;
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_emojis" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Emoji"><i class="fa-regular fa-face-smile"></i></button>
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_icons" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Add Emoji"><i class="fa-regular fa-image"></i></button>
+      </div>
+      
+      <div class="col-md-4 pt-2 px-0">
+        <button class="btn btn-sm drawing-control btn-outline-danger mt-2 drawing_mode_remove_all float-end m-1" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove All"><i class="fa-regular fa-trash-can"></i></button>
+        <button class="btn btn-sm drawing-control btn-outline-warning mt-2 drawing_mode_remove_selected_object float-end m-1" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove Selected Object"><i class="fa-solid fa-circle-minus"></i></button>
+
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_bring_up float-end m-1" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Bring Object Up"><i class="fa-solid fa-turn-up"></i></button>
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_bring_down float-end m-1" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Send Object Back"><i class="fa-solid fa-turn-down"></i></button>
+
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_redo float-end m-1" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Redo"><i class="fa-solid fa-arrow-rotate-right"></i></button>
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_undo float-end m-1" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Undo"><i class="fa-solid fa-rotate-left"></i></button>
+        
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_paste float-end m-1" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Paste" disabled><i class="fa-regular fa-paste"></i></button>
+        <button class="btn btn-sm drawing-control btn-outline-dark mt-2 drawing_mode_copy float-end m-1" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy" disabled><i class="fa-regular fa-copy"></i></button>
+        
+        <button class="btn btn-sm drawing-control btn-outline-primary mt-2 download_an_png float-end m-1" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="Downad as an Image"><i class="fa-solid fa-download"></i></button>
+      </div>
+    </div>
+    
+    <div class="row mt-2">
+      <div class="col-md-12 wrapper p-0">
+          <canvas id="drawing_area" style="border:1px solid #aaa"></canvas>
+      </div>
+      <div class="col-md-12">
+        <p class="float-end mt-2">Made with <i class="fa-regular fa-heart"></i> by <a href="https://www.linkedin.com/in/vr-patel/" target="_BLANK">VR Patel</a></p>
+      </div>
+    </div>
+
+    <div class="row mt-2" id="text-mode-options">
+      <div class="col-sm-1 p-1">
+        <p class="m-0 drawingTextControlName">Font Size</p>
+        <select id="text-mode-font-size" class="form-control text-center form-control-sm">
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option>
+          <option value="24">24</option>
+          <option value="25">25</option>
+          <option value="26">26</option>
+          <option value="27">27</option>
+          <option value="28">28</option>
+          <option value="29">29</option>
+          <option value="30">30</option>
+          <option value="31">31</option>
+          <option value="32">32</option>
+          <option value="33">33</option>
+          <option value="34">34</option>
+          <option value="35">35</option>
+          <option value="36">36</option>
+          <option value="37">37</option>
+          <option value="38">38</option>
+          <option value="39">39</option>
+          <option value="40">40</option>
+          <option value="41">40</option>
+          <option value="42">42</option>
+          <option value="43">43</option>
+          <option value="44">44</option>
+          <option value="45">45</option>
+        </select>
+      </div>
+      <div class="col-sm-1 p-1">
+        <p class="m-0 drawingTextControlName">Font Family</p>
+        <select id="text-mode-font-family" class="form-control form-control-sm">
+          <option value="arial">Arial</option>
+          <option value="myriad pro">Myriad Pro</option>
+          <option value="verdana">Verdana</option>
+          <option value="georgia">Georgia</option>
+          <option value="courier">Courier</option>
+          <option value="comic sans ms">Comic Sans MS</option>
+          <option value="impact">Impact</option>
+          <option value="monaco">Monaco</option>
+        </select>
+      </div>
+      <div class="col-sm-1 p-1">
+        <p class="m-0 text-center drawingTextControlName">Font Color</p>
+        <input type="color" name="text-color" id="text-mode-font-color" class="d-flex m-auto">
+      </div>
+      <div class="col-sm-1 p-1">
+        <p class="m-0 text-center drawingTextControlName">BG Color</p>
+        <input type="color" name="text-color" id="text-mode-font-bg-color" class="d-flex m-auto">
+      </div>
+      
+      <div class="col-sm-4 p-1">
+        <p class="m-0 drawingTextControlName text-center">&nbsp;</p>
+        <button class="btn btn-sm btn-outline-dark text-mode-bold" data-bs-toggle="tooltip" data-bs-placement="top" title="Bold">
+          <i class="fa-solid fa-bold"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-dark text-mode-italic" data-bs-toggle="tooltip" data-bs-placement="top" title="Italic">
+          <i class="fa-solid fa-italic"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-dark text-mode-underline" data-bs-toggle="tooltip" data-bs-placement="top" title="Underline">
+          <i class="fa-solid fa-underline"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-dark text-mode-strikethrough" data-bs-toggle="tooltip" data-bs-placement="top" title="Strikethrough">
+          <i class="fa-solid fa-strikethrough"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-dark text-mode-subscript" data-bs-toggle="tooltip" data-bs-placement="top" title="Subscript">
+          <i class="fa-solid fa-subscript"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-dark text-mode-superscript" data-bs-toggle="tooltip" data-bs-placement="top" title="SuperScript">
+          <i class="fa-solid fa-superscript"></i>
+        </button>
+        &nbsp;
+        <button class="btn btn-sm btn-outline-dark text-mode-align-left" data-bs-toggle="tooltip" data-bs-placement="top" title="Align text left">
+          <i class="fa-solid fa-align-left"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-dark text-mode-align-center" data-bs-toggle="tooltip" data-bs-placement="top" title="Align text center">
+          <i class="fa-solid fa-align-center"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-dark text-mode-align-right" data-bs-toggle="tooltip" data-bs-placement="top" title="Align text right">
+          <i class="fa-solid fa-align-right"></i>
+        </button>
+      </div>
+    </div>
+    
+    <div class="row mt-2" id="drawing-mode-options">
+      <div class="col-sm-4 p-0">
+        <select id="drawing-mode-selector" class="form-control d-none">
+          <option value="Pencil">Pencil</option>
+          <option value="Circle">Circle</option>
+          <option value="Spray">Spray</option>
+          <option value="Pattern">Pattern</option>
+          <option value="hLine">hLine</option>
+          <option value="vLine">vLine</option>
+          <option value="Square">Square</option>
+          <option value="Diamond">Diamond</option>
+        </select>
+        <p class="m-0 drawingPencilControlName">Mode: <span class="pencilActiveModeName"><strong>Pencil</strong></span></p>
+        <button type="button" class="btn btn-sm btn-outline-dark mb-1 drawing-pencil-mode p-0 active" data="Pencil">
+          <img src="assets/images/pencil.png" alt="Pencil Mode" class="drawing-mode-icon">
+        </button>
+        <button class="btn btn-sm btn-outline-dark mb-1 drawing-pencil-mode p-0" data="Circle">
+          <img src="assets/images/circle.png" alt="Pencil Mode" class="drawing-mode-icon">
+        </button>
+        <button class="btn btn-sm btn-outline-dark mb-1 drawing-pencil-mode p-0" data="Spray">
+          <img src="assets/images/spray.png" alt="Pencil Mode" class="drawing-mode-icon">
+        </button>
+        <button class="btn btn-sm btn-outline-dark mb-1 drawing-pencil-mode p-0" data="Pattern">
+          <img src="assets/images/pattern.png" alt="Pencil Mode" class="drawing-mode-icon">
+        </button>
+        <button class="btn btn-sm btn-outline-dark mb-1 drawing-pencil-mode p-0" data="hLine">
+          <img src="assets/images/hline.png" alt="Pencil Mode" class="drawing-mode-icon">
+        </button>
+        <button class="btn btn-sm btn-outline-dark mb-1 drawing-pencil-mode p-0" data="vLine">
+          <img src="assets/images/vline.png" alt="Pencil Mode" class="drawing-mode-icon">
+        </button>
+        <button class="btn btn-sm btn-outline-dark mb-1 drawing-pencil-mode p-0" data="Square">
+          <img src="assets/images/square.png" alt="Pencil Mode" class="drawing-mode-icon">
+        </button>
+        <button class="btn btn-sm btn-outline-dark mb-1 drawing-pencil-mode p-0" data="Diamond">
+          <img src="assets/images/diamond.png" alt="Pencil Mode" class="drawing-mode-icon">
+        </button>        
+      </div>
+      <div class="col-sm-2 px-2">
+        <p class="m-0 drawingPencilControlName">Pen Width</p>
+        <input type="range" value="15" min="1" max="100" id="drawing-line-width">
+      </div>
+
+      <div class="col-sm-1 px-1">
+        <p class="m-0 text-center drawingPencilControlName">Pencil Color</p>
+        <input type="color" value="#ee6911" id="drawing-color" class="d-flex m-auto">
+      </div>
+      <div class="col-sm-1 p-0">
+        <p class="text-center p-0 m-0 drawingPencilControlName">Shadow Color</p>
+        <input type="color" value="#005E7A" id="drawing-shadow-color" class="d-flex m-auto">
+      </div>
+      <div class="col-sm-2 px-3">
+        <p class="text-center m-0 drawingPencilControlName">Shadow Width</p>
+        <input type="range" value="0" min="0" max="50" id="drawing-shadow-width">
+      </div>
+      <div class="col-sm-2 px-3">
+        <p class="text-center m-0 drawingPencilControlName">Shadow Offset</p>
+        <input type="range" value="0" min="0" max="50" id="drawing-shadow-offset">
+      </div>
+    </div>
+    
+    <div class="row mt-2" id="shapes-mode-options">
+      <div class="col-sm-2 px-1">
+        <p class="m-0 text-center drawingShapeControlName">Border Color</p>
+        <input type="color" value="#ee6911" id="shape-border-color" class="d-flex m-auto">
+      </div>
+      <div class="col-sm-1 px-1">
+        <p class="m-0 text-center drawingShapeControlName">BG Color</p>
+        <input type="color" value="#ee6911" id="shape-bg-color" class="d-flex m-auto">
+      </div>
+      <div class="col-sm-2 px-3">
+        <p class="text-center m-0 drawingPencilControlName">Stroke Width</p>
+        <input type="range" value="0" min="0" max="50" id="shape-stroke-width">
+      </div>
+    </div>
+
+    <div class="row mt-2" id="emojis-mode-options">
+      <div class="col-sm-12 px-1">
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/0.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/1.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/2.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/3.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/4.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/5.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/6.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/7.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/8.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/9.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/10.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/11.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/12.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/13.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/14.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/15.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/16.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/17.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/18.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/19.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/20.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/21.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/22.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/23.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/24.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/25.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/26.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/27.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/28.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/29.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/30.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/31.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/32.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/33.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/34.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/35.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/36.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/37.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/38.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/39.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/40.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/41.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/42.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/43.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/44.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/45.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/46.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/47.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/48.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/emojis/49.png" class="emoji-img " alt="emoji">
+        </button>
+      </div>
+    </div>
+
+    <div class="row mt-2" id="icons-mode-options">
+      <div class="col-sm-12 px-1">
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/1.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/2.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/3.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/4.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/5.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/6.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/7.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/8.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/9.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/10.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/11.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/12.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/13.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/14.png" class="emoji-img " alt="emoji">
+        </button>
+        <button class="btn btn-outline-dark p-1">
+          <img src="assets/images/icons/15.png" class="emoji-img " alt="emoji">
+        </button>
+      </div>
+    </div>
+
+    <script src="./assets/js/jquery-3.5.0.min.js"></script>    
+    <script src="./assets/js/bootstrap.bundle.min.js"></script>
+    <script src="./assets/js/main.js"></script>
+</body>
+
+</html>
