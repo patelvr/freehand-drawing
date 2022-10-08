@@ -1,6 +1,6 @@
 # Freehand Drawing Tool
 
-This is a tool made with javascript to draw & write online freehand with pencil with shapes, emojis, icons & images.
+This is a tool made with javascript to draw & write online freehand with pencil, shapes, emojis, icons & images.
 
 
 ## Author
